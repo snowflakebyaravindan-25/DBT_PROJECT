@@ -6,6 +6,6 @@ taco_bytes:
       role: DEVELOPER_ROLE
       warehouse: XSMALL_WH
       database: TACO_BYTES_DBT_DB
-      schema: RAW
+      schema: STAGING
       account: ' '
       user: ' '

@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: RAW
+    database: TACO_BYTES_DBT_DB
+    schema: RAW
+    tables:
+      - name: COUNTRY
+      - name: FRANCHISE
+      - name: LOCATION
+      - name: MENU
+      - name: TRUCK
+      - name: ORDER_HEADER
+      - name: ORDER_DETAIL
+      - name: CUSTOMER_LOYALTY

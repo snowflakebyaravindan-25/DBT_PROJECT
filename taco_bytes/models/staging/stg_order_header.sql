@@ -1,0 +1,30 @@
+WITH RAW AS (
+    SELECT *
+    FROM {{ source('RAW', 'ORDER_HEADER') }}
+),
+
+CLEANED AS (
+    SELECT 
+        ORDER_ID,
+        TRUCK_ID,
+        LOCATION_ID,
+        CUSTOMER_ID,
+        DISCOUNT_ID,
+        SHIFT_ID,
+        SHIFT_START_TIME,
+        SHIFT_END_TIME,
+        ORDER_CHANNEL,
+        ORDER_TS,
+        SERVED_TS,
+        UPPER(ORDER_CURRENCY) AS ORDER_CURRENCY,
+        ORDER_AMOUNT,
+        ORDER_TAX_AMOUNT,
+        ORDER_DISCOUNT_AMOUNT,
+        ORDER_TOTAL
+    FROM RAW
+    WHERE CUSTOMER_ID IS NOT NULL
+    LIMIT 10000
+)
+
+SELECT *
+FROM CLEANED

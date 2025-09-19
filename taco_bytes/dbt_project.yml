@@ -16,4 +16,10 @@ snapshot-paths:
   - snapshots
 models:
   taco_bytes:
-    +materialized: view
+    staging:
+      +schema: staging
+      +materialized: table
+    core:
+      +schema: core_df
+      +materialized: table
+    

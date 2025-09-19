@@ -1,0 +1,23 @@
+WITH RAW AS (
+    SELECT *
+    FROM {{ source('RAW', 'ORDER_DETAIL') }}
+),
+
+CLEANED AS (
+    SELECT 
+        ORDER_DETAIL_ID,
+        ORDER_ID,
+        MENU_ITEM_ID,
+        DISCOUNT_ID,
+        LINE_NUMBER,
+        QUANTITY,
+        UNIT_PRICE,
+        PRICE,
+        ORDER_ITEM_DISCOUNT_AMOUNT
+    FROM RAW
+    WHERE ORDER_ID IN (SELECT ORDER_ID FROM {{ ref( 'stg_order_header' ) }})
+    LIMIT 10000
+)
+
+SELECT *
+FROM CLEANED
