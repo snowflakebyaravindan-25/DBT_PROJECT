@@ -1,0 +1,11 @@
+taco_bytes:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      role: DEVELOPER_ROLE
+      warehouse: XSMALL_WH
+      database: TACO_BYTES_DBT_DB
+      schema: RAW
+      account: ' '
+      user: ' '
