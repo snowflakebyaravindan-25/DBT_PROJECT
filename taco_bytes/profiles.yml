@@ -3,9 +3,9 @@ taco_bytes:
   outputs:
     dev:
       type: snowflake
-      role: ' '
-      warehouse: ' '
-      database: ' '
-      schema: ' '
-      account: ' '
-      user: ' '
+      account: 'not needed'
+      user: 'not needed'
+      role: DEVELOPER_ROLE
+      warehouse: XSMALL_WH
+      database: TACO_BYTES_DBT_DB
+      schema: RAW
