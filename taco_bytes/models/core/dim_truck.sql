@@ -1,0 +1,23 @@
+WITH BASE AS (
+    SELECT 
+        T.TRUCK_ID,
+        F.FRANCHISE_ID,
+        COALESCE(F.FIRST_NAME, '') || ' ' || COALESCE(F.LAST_NAME, '') AS FRANCHISE_OWNER_NAME,
+        F.EMAIL AS FRANCHISE_OWNER_EMAIL,
+        F.PHONE_NUMBER AS FRANCHISE_OWNER_PHONE,
+        T.CITY_NAME,
+        T.REGION,
+        T.COUNTRY_NAME,
+        T.MODEL AS TRUCK_MODEL,
+        CASE 
+            WHEN T.EV_FLAG = 1 THEN 'Yes'
+            ELSE 'No'
+        END AS EV_FLAG,
+        DATEDIFF(YEAR, T.TRUCK_OPENING_DATE, CURRENT_DATE) AS TRUCK_AGE
+    FROM {{ ref('stg_truck') }} AS T
+    INNER JOIN {{ ref('stg_franchise') }} AS F
+        ON T.FRANCHISE_ID = F.FRANCHISE_ID
+)
+
+SELECT * 
+FROM BASE

@@ -1,37 +1,36 @@
-WITH CUSTOMER AS (
-    SELECT *
-    FROM {{ ref('stg_customer_loyalty') }}
-),
-COUNTRY AS (
-    SELECT *
-    FROM {{ ref('stg_country') }}
+WITH BASE AS (
+    SELECT 
+        CL.CUSTOMER_ID,
+        CL.FIRST_NAME,
+        CL.LAST_NAME,
+        CL.FIRST_NAME || ' ' || CL.LAST_NAME AS FULL_NAME,
+        CL.GENDER,
+        CL.MARITAL_STATUS,
+        CL.CHILDREN_COUNT,
+        CL.FAVOURITE_BRAND,
+        CL.PREFERRED_LANGUAGE,
+        CL.CITY_NAME,
+        CL.POSTAL_CODE,
+        CL.COUNTRY_NAME,
+        CO.ISO_CODE,
+        CO.ISO_CURRENCY,
+        CL.SIGN_UP_DATE,
+        CL.BIRTHDAY_DATE,
+        DATEDIFF(YEAR, CL.BIRTHDAY_DATE, CURRENT_DATE) AS AGE,
+        CASE 
+            WHEN AGE < 18 THEN 'Minor'
+            WHEN AGE BETWEEN 18 AND 25 THEN 'Youth'
+            WHEN AGE BETWEEN 26 AND 40 THEN 'Adult'
+            WHEN AGE BETWEEN 41 AND 60 THEN 'Middle Age'
+            WHEN AGE > 60 THEN 'Senior'
+        END AS AGE_GROUP,
+        CL.EMAIL,
+        CL.PHONE_NUMBER
+    FROM {{ ref('stg_customer_loyalty') }} AS CL
+    JOIN {{ ref('stg_country') }} AS CO
+        ON CL.COUNTRY_NAME = CO.COUNTRY_NAME --COUNTRY_NAME was used because the dataset does not have COUNTRY_ID in the CUSTOMER_LOYALTY table. The best practice is always to use IDs.
 )
-SELECT 
-    C.CUSTOMER_ID,
-    C.FIRST_NAME,
-    C.LAST_NAME,
-    CONCAT(C.FIRST_NAME, ' ', C.LAST_NAME) AS FULL_NAME,
-    C.GENDER,
-    C.MARITAL_STATUS,
-    C.CHILDREN_COUNT,
-    C.FAVOURITE_BRAND,
-    C.PREFERRED_LANGUAGE,
-    C.CITY_NAME,
-    C.POSTAL_CODE,
-    C.COUNTRY_NAME,
-    CO.ISO_CODE,
-    CO.ISO_CURRENCY,
-    C.SIGN_UP_DATE,
-    C.BIRTHDAY_DATE,
-    DATEDIFF(YEAR, C.BIRTHDAY_DATE, CURRENT_DATE) AS AGE,
-    CASE 
-        WHEN DATEDIFF(YEAR, C.BIRTHDAY_DATE, CURRENT_DATE) < 18 THEN 'Youth'
-        WHEN DATEDIFF(YEAR, C.BIRTHDAY_DATE, CURRENT_DATE) BETWEEN 18 AND 39 THEN 'Adult'
-        WHEN DATEDIFF(YEAR, C.BIRTHDAY_DATE, CURRENT_DATE) BETWEEN 40 AND 59 THEN 'Middle Age'
-        ELSE 'Senior'
-    END AS AGE_GROUP,
-    C.EMAIL,
-    C.PHONE_NUMBER
-FROM CUSTOMER AS C
-INNER JOIN COUNTRY AS CO
- ON C.COUNTRY_NAME = CO.COUNTRY_NAME --COUNTRY_NAME was used because the dataset does not have COUNTRY_ID in the CUSTOMER_LOYALTY table. The best practice is always to use IDs.
+
+SELECT *
+FROM BASE
+
