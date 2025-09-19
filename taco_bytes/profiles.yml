@@ -3,9 +3,9 @@ taco_bytes:
   outputs:
     dev:
       type: snowflake
-      role: DEVELOPER_ROLE
-      warehouse: XSMALL_WH
-      database: TACO_BYTES_DBT_DB
-      schema: STAGING
+      role: ' '
+      warehouse: ' '
+      database: ' '
+      schema: ' '
       account: ' '
       user: ' '
